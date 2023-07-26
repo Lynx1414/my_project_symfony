@@ -1,0 +1,67 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+html, body{
+  box-sizing: border-box;
+}
+
+/*_______________ /clients (clients.html.twig)__________________ */
+.wrapper_button{
+  display: flex;
+  justify-content: center;
+}
+
+button{
+  padding: 0.5em;
+}
+
+button >a{
+  text-decoration: none;
+  color: black;
+}
+
+.row{
+  justify-content: center !important;
+  margin: 1em auto !important;
+}
+
+.example-wrapper {
+  margin: 1em auto;
+  max-width: 800px;
+  width: 95%;
+  font: 18px / 1.5 sans-serif;
+}
+
+.example-wrapper code {
+  background: #F5F5F5;
+  padding: 2px 6px;
+}
+
+th {
+  font-size: 1.2em;
+  text-align: center;
+}
+
+
+/* 
+td img{
+  width: 100% !important;
+} */
+
+section.d-flex{
+  box-sizing: border-box;
+}
+
+.card{
+  border-color: darkslategray !important;
+}
+
+.card img{
+  padding: 0.5em;
+ 
+}
+.card>.list-group {
+  border-top: none !important;
+}

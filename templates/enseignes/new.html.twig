@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter une Enseigne{% endblock %}
+
+{% block body %}
+    <h1>Ajouter une Enseigne</h1>
+
+    {{ include('enseignes/_form.html.twig') }}
+
+    <a href="{{ path('app_enseignes_index') }}">retour à la liste des Enseignes</a>
+{% endblock %}

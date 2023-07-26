@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Enseignes index
+{% endblock %}
+
+{% block body %}
+	<h1>Enseignes</h1>
+
+	<table class="table table-striped table-hover">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Nom enseigne</th>
+				<th>Ville</th>
+				<th>Nbre employes</th>
+				<th>Chiffre d'affaire annuel HT</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for enseigne in enseignes %}
+				<tr>
+					<td>{{ enseigne.id }}</td>
+					<td>{{ enseigne.nomEnseigne }}</td>
+					<td>{{ enseigne.ville }}</td>
+					<td>{{ enseigne.nbreEmployes }}</td>
+					<td>{{ enseigne.chiffreAffaireAnnuelHT }} K€</td>
+					<td>
+						<a class= "btn btn-success" href="{{ path('app_enseignes_show', {'id': enseigne.id}) }}">show</a>
+						<a class= "btn btn-primary" href="{{ path('app_enseignes_edit', {'id': enseigne.id}) }}">edit</a>
+					</td>
+
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="6">no records found</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	{% if app.user %}
+		<a href="{{ path('app_enseignes_new') }}">Create new</a>
+	{% endif %}
+{% endblock %}
