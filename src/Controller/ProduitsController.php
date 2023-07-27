@@ -71,10 +71,28 @@ class ProduitsController extends AbstractController
     #[Route('/{id}/edit', name: 'app_produits_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Produits $produit, EntityManagerInterface $entityManager): Response
     {
+        //recup de la photo courante avec le getter
+        $img= $produit->getImageProduit();
         $form = $this->createForm(ProduitsType::class, $produit);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            //traitement du fichier upload
+            $file= $form['image_produit']->getData();
+            if(!is_string($file)){
+                $fileName= $file->getClientOriginalName();
+                $file->move(
+                    $this->getParameter('images_directory'),
+                    $fileName
+                );
+                $produit->setImageProduit($fileName);
+                $this->addFlash('success', 'Votre image a bien été modifiée !');
+            }else{
+                $produit->setImageProduit($img);
+            }
+
+            //DQL UPDATE ET SAUVEGARDE
+            $entityManager->persist($produit);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_produits_index', [], Response::HTTP_SEE_OTHER);

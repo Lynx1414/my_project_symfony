@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\Enseignes;
 use App\Entity\Produits;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -30,7 +32,20 @@ class ProduitsType extends AbstractType
             ->add('date_depot_produit', DateType::class, array(
                 'widget' => 'single_text',
             ))
-            ->add('prix_produit', NumberType::class);
+            ->add('prix_produit', NumberType::class)
+            ->add('reference', ReferencesType::class, [
+                'required' => true,
+            ])
+            ->add('enseignes', EntityType::class, [
+                'class' => Enseignes::class,
+                'choice_label'=> 'nomEnseigne',
+                'label'=> 'Sélectionner une ou plusieurs enseigne(s)',
+                'multiple' => true,
+            ])
+            ->add('category', CategoriesType::class, array(
+                'required' => true,
+            ));
+         
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -40,3 +55,7 @@ class ProduitsType extends AbstractType
         ]);
     }
 }
+
+       // todo la propriete de class $reference sera a appellé dans  pour appeller la methode getNumeroReference() methode de la class References.php
+            //todo ReferencesType gère à la fois le type de l'input et imbrique le formulaire ReferencesType dans le formulaire ProduitsType
+            //todo ainsi quand on voudra ajouter un produit le form de ReferenceType sera inclus inside

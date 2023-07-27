@@ -65,3 +65,8 @@ section.d-flex{
 .card>.list-group {
   border-top: none !important;
 }
+
+.list-group-item{
+  border: none !important;
+  
+}

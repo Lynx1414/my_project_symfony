@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\EnseignesRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EnseignesRepository::class)]
@@ -24,6 +26,15 @@ class Enseignes
 
     #[ORM\Column]
     private ?float $chiffre_affaire_annuel_HT = null;
+    //! MANY TO MANY avec Produits
+    #[ORM\ManyToMany(targetEntity: Produits::class, mappedBy: 'enseignes')]
+    private Collection $produits;
+    //tableau d'objet qui inclut un tableau en value json_encode
+
+    public function __construct()
+    {
+        $this->produits = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -74,6 +85,33 @@ class Enseignes
     public function setChiffreAffaireAnnuelHT(float $chiffre_affaire_annuel_HT): static
     {
         $this->chiffre_affaire_annuel_HT = $chiffre_affaire_annuel_HT;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Produits>
+     */
+    public function getProduits(): Collection
+    {
+        return $this->produits;
+    }
+
+    public function addProduit(Produits $produit): static
+    {
+        if (!$this->produits->contains($produit)) {
+            $this->produits->add($produit);
+            $produit->addEnseigne($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduit(Produits $produit): static
+    {
+        if ($this->produits->removeElement($produit)) {
+            $produit->removeEnseigne($this);
+        }
 
         return $this;
     }

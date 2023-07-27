@@ -7,32 +7,47 @@
 	<h1>Produits</h1>
 
 	<form class="" role="search">
-	<div class="d-flex col-2 mx-auto column-gap-2">
-	<div>
-		<input class="form-control searchbar m-3" type="search" placeholder="Search" aria-label="Search">
-	</div>
-	<div>
-		<button class="btn btn-outline-success m-3" type="submit">Search</button>
-	</div>
-	</div>
+		<div class="d-flex col-2 mx-auto column-gap-2" >
+			<div>
+				<input class="form-control searchbar m-3" type="search" placeholder="Search" aria-label="Search">
+			</div>
+			<div>
+				<button class="btn btn-outline-success m-3" type="submit">Search</button>
+			</div>
+		</div>
 	</form>
 
 	{% for produit in produits %}
-		<section class="d-flex flex-column align-items-center justify-content-between">
-			<div class="card d-flex" style="width: 18rem;">
+		<section class="d-flex flex-column align-items-center ">
+			<div class="card" style="width: 25rem;">
 				<img src="{{ asset('img/' ~ produit.imageProduit) }}" class="card-img-top" alt="...">
 				<div class="card-body">
-					<h5 class="card-title">{{ produit.nomProduit }}</h5>
+					<h4 class="card-title">{{ produit.nomProduit }}</h4>
 					<p class="card-text">Description:
 						{{ produit.descriptionProduit }}</p>
+					<p class="card-text">Réf.
+						<b>{{ produit.reference.numeroReference }}</b>&nbsp&nbsp
+						Cat.
+					<b>{{produit.category.nomCategory}}</b>
+					</p>
+					
 				</div>
 				<ul class="list-group list-group-flush">
+
 					<li class="list-group-item">Prix:
-						{{ produit.prixProduit }}</li>
+						{{ produit.prixProduit }} €</li>
 					<li class="list-group-item">En stock:
-						{{ produit.stockProduit ? 'Oui' : 'Non' }}</li>
+						{{ produit.stockProduit ? 'disponible' : 'rupture de stock' }}</li>
 					<li class="list-group-item">Date de dépôt:
 						{{ produit.dateDepotProduit ? produit.dateDepotProduit|date('d/m/Y') : '' }}</li>
+
+					{% if produit.stockProduit == 'disponible' %}
+					<ul class="list-group list-group-flush mb-2 " style="padding-left: 1rem">Enseigne(s) :
+						{% for enseignes in produit.enseignes %}
+							<li class="list-group-item pt-0 pb-0 ms-5"> - {{ enseignes.nomEnseigne}}</li>
+						{% endfor %}
+					{% endif %}
+					</ul>
 				</ul>
 				{% if app.user %}
 					<div class="card-body">
@@ -50,9 +65,9 @@
 
 	{% endfor %}
 	{% if app.user %}
-	<div class="d-flex col-1 mx-auto mb-3">
-		<a class="btn btn-success" href="{{ path('app_produits_new') }}">Ajouter un produit</a>
-	</div>
+		<div class="d-flex col-1 mx-auto mb-3">
+			<a class="btn btn-success" href="{{ path('app_produits_new') }}">Ajouter un produit</a>
+		</div>
 	{% endif %}
 
 {% endblock %}

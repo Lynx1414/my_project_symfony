@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProduitsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -27,11 +29,29 @@ class Produits
     #[ORM\Column]
     private ?bool $stock_produit = null;
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date_depot_produit = null;
 
     #[ORM\Column]
     private ?int $prix_produit = null;
+    //! ONE TO ONE avec References
+    #[ORM\OneToOne(inversedBy: 'nom_ref_produit', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?References $reference = null;
+    
+    //! MANY TO MANY avec Enseignes
+    #[ORM\ManyToMany(targetEntity: Enseignes::class, inversedBy: 'produits')]
+    private Collection $enseignes;
+
+    #[ORM\ManyToOne(inversedBy: 'produits')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Categories $category = null;
+
+    public function __construct()
+    {
+        $this->enseignes = new ArrayCollection();
+    }
+    // todo la propriete de class $reference sera a appellé dans  pour appeller la methode getNumeroReference() methode de la class References.php
 
     public function getId(): ?int
     {
@@ -106,6 +126,54 @@ class Produits
     public function setPrixProduit(int $prix_produit): static
     {
         $this->prix_produit = $prix_produit;
+
+        return $this;
+    }
+
+    public function getReference(): ?References
+    {
+        return $this->reference;
+    }
+
+    public function setReference(References $reference): static
+    {
+        $this->reference = $reference;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Enseignes>
+     */
+    public function getEnseignes(): Collection
+    {
+        return $this->enseignes;
+    }
+
+    public function addEnseigne(Enseignes $enseigne): static
+    {
+        if (!$this->enseignes->contains($enseigne)) {
+            $this->enseignes->add($enseigne);
+        }
+
+        return $this;
+    }
+
+    public function removeEnseigne(Enseignes $enseigne): static
+    {
+        $this->enseignes->removeElement($enseigne);
+
+        return $this;
+    }
+
+    public function getCategory(): ?Categories
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Categories $category): static
+    {
+        $this->category = $category;
 
         return $this;
     }
