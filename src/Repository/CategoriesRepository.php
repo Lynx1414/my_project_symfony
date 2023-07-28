@@ -21,6 +21,18 @@ class CategoriesRepository extends ServiceEntityRepository
         parent::__construct($registry, Categories::class);
     }
 
+    public function findProduitByCategory(){
+        $query= $this->createQueryBuilder('produitsCopy')
+        ->select('produitsCopy')
+        ->join('produitsCopy.category_id', 'categoryCopy')
+        ->where('produitsCopy.category_id = categoryCopy.id')
+        ->getQuery();
+
+        $produitByCat= $query->getResult();
+
+        return $produitByCat;
+    }
+
 //    /**
 //     * @return Categories[] Returns an array of Categories objects
 //     */

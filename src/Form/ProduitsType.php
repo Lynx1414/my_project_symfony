@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Categories;
 use App\Entity\Enseignes;
 use App\Entity\Produits;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -42,10 +43,11 @@ class ProduitsType extends AbstractType
                 'label'=> 'Sélectionner une ou plusieurs enseigne(s)',
                 'multiple' => true,
             ])
-            ->add('category', CategoriesType::class, array(
+            ->add('category', EntityType::class, array(
+                'class' => Categories::class,
+                'choice_label'=> 'nomCategory',
                 'required' => true,
             ));
-         
     }
 
     public function configureOptions(OptionsResolver $resolver): void

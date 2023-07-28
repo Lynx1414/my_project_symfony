@@ -4,18 +4,30 @@
 {% endblock %}
 
 {% block body %}
-	<h1>Produits</h1>
 
-	<form class="" role="search">
-		<div class="d-flex col-2 mx-auto column-gap-2" >
-			<div>
-				<input class="form-control searchbar m-3" type="search" placeholder="Search" aria-label="Search">
-			</div>
-			<div>
-				<button class="btn btn-outline-success m-3" type="submit">Search</button>
-			</div>
-		</div>
-	</form>
+	{# {{ produitByRef.nomProduit }} #}
+
+<section class="d-flex flex-column align-items-center ">
+<h2>Produit du mois</h2>
+<div class="card" style="width: 18rem;">
+  <img src="{{ asset('img/' ~ produitVedette.imageProduit) }}" class="card-img-top" alt="...">
+  <div class="card-body">
+    <p class="card-text"><b>{{produitVedette.nomProduit}}</b> <span>{{produitVedette.prixProduit}} €</span> </p>
+		<p class="card-text">Réf. {{ produitVedette.reference.numeroReference }}&nbsp&nbsp Cat. {{produitVedette.category.nomCategory}}</p>
+  </div>
+	<a class="btn btn-success" href="{{ path('app_produits_show', {'id': produitVedette.id}) }}">Voir le produit</a>
+</div>
+</section>
+
+	<hr>
+	
+	<form class="" action="#" method="#">
+    <div class="d-flex col-4 mx-auto column-gap-1">
+        <h4>Tous les produits</h4>
+        <input class="form-control searchbar m-4" type="search" name="ref" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success m-4" type="submit">Search</button>
+    </div>
+</form>
 
 	{% for produit in produits %}
 		<section class="d-flex flex-column align-items-center ">

@@ -21,6 +21,28 @@ class ProduitsRepository extends ServiceEntityRepository
         parent::__construct($registry, Produits::class);
     }
 
+    public function lastProduitVedette(){
+        $produitVedette= $this->createQueryBuilder('produitsCopy')
+        ->orderBy('produitsCopy.id', 'DESC')
+        ->setMaxResults(1)
+        ->getQuery() 
+        ->getOneOrNullResult();
+        
+        return $produitVedette;
+    }
+
+    
+    // public function findProduitByRef($ref)
+    // {
+    //     $produitByRef = $this->createQueryBuilder('produitsCopy') // Crée un QueryBuilder pour l'entité Produits avec un alias 'produitsCopy'.
+    //         ->join('produitsCopy.reference', 'referencesCopy') // Effectue une jointure entre l'entité Produits et l'entité Reference (via la relation reference_id) avec un alias 'referencesCopy'.
+    //         ->where('referencesCopy.id', $ref) // Filtre les résultats en utilisant la clause WHERE pour récupérer uniquement les produits dont la référence (l'attribut id de l'entité Reference) correspond à la valeur $ref passée en paramètre.
+    //         ->getQuery() // Obtient l'objet Query correspondant à la requête DQL construite.
+    //         ->getResult(); // Exécute la requête et récupère le résultat sous forme d'un tableau d'objets.
+    
+    //     return $produitByRef; // Renvoie les produits trouvés sous forme d'un tableau d'objets.
+    // }
+
 //    /**
 //     * @return Produits[] Returns an array of Produits objects
 //     */
@@ -45,4 +67,6 @@ class ProduitsRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+
 }

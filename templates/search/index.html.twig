@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SearchController!
+{% endblock %}
+
+{% block body %}
+	<h4>Toutes les références produits</h4>
+
+<div>
+{% for reference in references %}
+ 
+    <a href="{{ path('app_search_byRef', {'id': reference.id }) }}">{{reference.numeroReference}}</a>
+{% endfor %}
+
+</div>
+
+{# 
+	<div class="">
+		<select name="ref" id="ref">
+			numero Reference
+			{% for reference in references %}
+				<option value="{{reference.numeroReference}}">{{reference.numeroReference}}</option>
+			{% endfor %}
+		</select>
+
+        
+
+    
+	</div> #}
+	{# <input class="form-control searchbar m-4" type="search" name="ref" placeholder="Search" aria-label="Search">   #}
+	{# <a href="{{ path('app_search_index', {'id': reference.id}) }}" class="btn btn-outline-success m-4" type="submit">Search</a> #}
+
+
+{% endblock %}

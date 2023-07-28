@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}produitByRef Found !
+{% endblock %}
+
+{% block body %}
+
+<h2>Le produit portant cette référence :</h2>
+{# <p>id de la référence: {{attribut}} </p>
+<p>nom produit de la reference: {{nomProduitRef.nomProduit}}</p> #}
+
+ {% include 'produits/cardProduit.html.twig' %}
+
+{% endblock %}

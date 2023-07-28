@@ -21,6 +21,19 @@ class ReferencesRepository extends ServiceEntityRepository
         parent::__construct($registry, References::class);
     }
 
+    public function findProduitByRef(){
+        {
+            $query = $this->createQueryBuilder('p')
+                ->select('p.nom_produit') // Sélectionne uniquement le nom_produit
+                ->join('p.reference', 'r') // Jointure avec la relation 'reference' (assumant que la relation est correctement configurée dans l'entité Produits)
+                ->getQuery();
+    
+            $produits = $query->getResult();
+    
+            return $produits;
+        }
+    }
+   
 //    /**
 //     * @return References[] Returns an array of References objects
 //     */

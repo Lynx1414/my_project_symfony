@@ -3,10 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Produits;
+use App\Entity\References;
 use App\Form\ProduitsType;
 use App\Repository\ProduitsRepository;
+use App\Repository\ReferencesRepository;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,8 +23,9 @@ class ProduitsController extends AbstractController
     {
         return $this->render('produits/index.html.twig', [
             'produits' => $produitsRepository->findAll(),
+            'produitVedette' => $produitsRepository->lastProduitVedette(),
         ]);
-    }
+    }   
 
     #[Route('/new', name: 'app_produits_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -114,4 +119,22 @@ class ProduitsController extends AbstractController
 
         return $this->redirectToRoute('app_produits_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    // #[Route('/{id}/search', name: 'app_search', methods: ['GET', 'POST'])]
+    // public function search(Request $request, References $references,  ReferencesRepository $referencesRepository, EntityManagerInterface $entityManager, $ref=null): Response
+    // {
+    //     // $reference = new References();
+    //     // // Créez le formulaire
+    //     // $form_ref = $this->createForm(SearchType::class, $reference);
+    //     // // Traitez le formulaire
+    //     // $form_ref->handleRequest($request);
+    //     // // Vérifiez si le formulaire a été soumis et est valide
+    //     // if ($form_ref->isSubmitted() && $form_ref->isValid()) {
+    //     //     return $this->redirectToRoute('app_produits_search', [], Response::HTTP_SEE_OTHER);
+    //     // }
+
+    //     return $this->render('produits/searchReference.html.twig', [
+    //         'references' => $referencesRepository->findAll()
+    //     ]);
+    // }
 }

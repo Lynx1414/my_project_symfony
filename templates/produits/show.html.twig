@@ -31,6 +31,16 @@
                 <th>Date_depot_produit</th>
                 <td>{{ produit.dateDepotProduit ? produit.dateDepotProduit|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
+
+            <tr>
+                <th>Référence</th>
+                <td>{{ produit.reference.numeroReference }}</td>
+            </tr>
+            <tr>
+                <th>Catégorie</th>
+                <td>{{produit.category.nomCategory}}</td>
+            </tr>
+
         </tbody>
     </table>
 
