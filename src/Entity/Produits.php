@@ -8,8 +8,12 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 #[ORM\Entity(repositoryClass: ProduitsRepository::class)]
+//Contrainte pour éviter doublons des noms de produits
+// #[UniqueEntity(['nom_produit'], 'Ce nom de produit est indisponible !')]
 class Produits
 {
     #[ORM\Id]
@@ -18,6 +22,15 @@ class Produits
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    //Contrainte sur le nbre de caractères min et max du nom du produit
+    //min 2 caractères max 50 
+    // la méthode limit est dans le fichier vendor->symfony->contraints->validator->Length.php
+    #[Assert\Length(
+        min: 2,
+        max: 50,
+        minMessage: 'Le nom de votre produit doit être au moins de {{ limit }} caractères',
+        maxMessage: 'Le nom de votre produit doit ne peut pas excéder {{ limit }} caractères',
+    )]
     private ?string $nom_produit = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -33,19 +46,26 @@ class Produits
     private ?\DateTimeInterface $date_depot_produit = null;
 
     #[ORM\Column]
+    //Contrainte pour interdir des chiffres négatifs pour les prix_produits 
+    #[Assert\Positive]
     private ?int $prix_produit = null;
     //! ONE TO ONE avec References
     #[ORM\OneToOne(inversedBy: 'nom_ref_produit', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?References $reference = null;
     
-    //! MANY TO MANY avec Enseignes
+    //! MANY TO MANY  MANY Produits to MANY Enseignes
     #[ORM\ManyToMany(targetEntity: Enseignes::class, inversedBy: 'produits')]
     private Collection $enseignes;
 
     #[ORM\ManyToOne(inversedBy: 'produits')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Categories $category = null;
+
+    //! MANY TO ONE  MANY ProduitS TO ONE Users
+    #[ORM\ManyToOne(inversedBy: 'produits')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Users $user = null;
 
     public function __construct()
     {
@@ -174,6 +194,18 @@ class Produits
     public function setCategory(?Categories $category): static
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getUser(): ?Users
+    {
+        return $this->user;
+    }
+
+    public function setUser(?Users $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

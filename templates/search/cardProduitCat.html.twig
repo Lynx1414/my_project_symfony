@@ -1,0 +1,58 @@
+{% block body %}
+</body>
+{% for nomProduit in nomsProduits %}
+<section class="d-flex justify-content-around align-items-center ">
+			<div class="card" style="width: 25rem;">
+				<img src="{{ asset('img/' ~ nomProduit.imageProduit) }}" class="card-img-top" alt="...">
+				<div class="card-body">
+					<h4 class="card-title">{{ nomProduit.nomProduit }}</h4>
+					<p class="card-text">Description:
+						{{ nomProduit.descriptionProduit }}</p>
+					<p class="card-text">Réf.
+						<b>{{ nomProduit.reference.numeroReference }}</b>&nbsp&nbsp
+						Cat.
+					<b>{{nomProduit.category.nomCategory}}</b>
+					</p>
+					
+				</div>
+				<ul class="list-group list-group-flush">
+
+					<li class="list-group-item">Prix:
+						{{ nomProduit.prixProduit }} €</li>
+					<li class="list-group-item">En stock:
+						{{ nomProduit.stockProduit ? 'disponible' : 'rupture de stock' }}</li>
+					<li class="list-group-item">Date de dépôt:
+						{{ nomProduit.dateDepotProduit ? nomProduit.dateDepotProduit|date('d/m/Y') : '' }}</li>
+
+					{# {% if nomProduit.stockProduit == 'disponible' %}
+					<ul class="list-group list-group-flush mb-2 " style="padding-left: 1rem">Enseigne(s) :
+
+						{% for enseignes in produit.enseignes %}
+							<li class="list-group-item pt-0 pb-0 ms-5"> - {{ enseignes.nomEnseigne}}</li>
+						{% endfor %}
+
+					{% endif %} #}
+					</ul>
+				</ul>
+				{% if app.user %}
+					<div class="card-body">
+						<a href="{{ path('app_produits_show', {'id': nomProduit.id}) }}" class="card-link">Fiche produit</a>
+						<a href="{{ path('app_produits_edit', {'id': nomProduit.id}) }}" class="card-link">Modifier
+						</a>
+					</div>
+			</div>
+		</section><br>
+	{% else %}
+		<tr>
+			<td colspan="8">no records found</td>
+		</tr>
+{% endif %}
+{% endfor %}
+	{% if app.user %}
+		<div class="d-flex col-1 mx-auto mb-3">
+			<a class="btn btn-success" href="{{ path('app_produits_new') }}">Ajouter un produit</a>
+		</div>
+	{% endif %}
+	
+
+{% endblock %}

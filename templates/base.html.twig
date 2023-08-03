@@ -28,16 +28,20 @@
 					<div class="collapse navbar-collapse" id="navbarSupportedContent">
 
 						<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+						{% if app.user %}
 							<li class="nav-item">
-								<a class="nav-link active" aria-current="page" href="{{path('app_login')}}">Accueil</a>
+								<a class="nav-link active" aria-current="page" href="{{ path('app_produits_tableauBordUser', {'id': app.user.id}) }}">Mon tableau de bord</a>
 							</li>
+						{% endif %}
+							{% block navbarUserEnseignes %}
 							<li class="nav-item dropdown">
-								<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Enseignes</a>
+								{# <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Enseignes</a> #}
 								<ul class="dropdown-menu">
-									<li>
+									{# <li>
 										<a class="dropdown-item" href="{{path('app_enseignes_index')}}">Liste des Enseignes</a>
-									</li>
-									{% if app.user %}
+									</li> #}
+									
+									{# {% if app.user %}
 										<li>
 											<a class="dropdown-item" href="{{path('app_enseignes_new')}}">Nouvelle enseigne</a>
 										</li>
@@ -51,7 +55,8 @@
 										<li>
 											<a class="dropdown-item" href="{{path('app_enseignes_delete', {'id': 'id'})}}">Supprimer une enseigne</a>
 										</li>
-									{% endif %}
+									{% endif %} #}
+								{% endblock %}
 								</ul>
 							</li>
 
@@ -63,7 +68,8 @@
 									<li>
 										<a class="dropdown-item" href="{{path('app_produits_index')}}">Tous les produits</a>
 									</li>
-									{% if app.user %}
+									{% block navbarUserProduits %}
+									{# {% if app.user %}
 										<li>
 											<a class="dropdown-item" href="{{path('app_produits_new')}}">Ajouter un produit</a>
 										</li>
@@ -74,45 +80,53 @@
 										<li>
 											<a class="dropdown-item" href="{{path('app_produits_delete', {'id': 'id'})}}">Supprimer un produit</a>
 										</li>
-									{% endif %}
+									{% endif %} #}
+									{% endblock %}
 								</ul>
 							</li>
 						</li>
-						<li class="nav-item">
-							<a class="nav-link disabled">Users</a>
-						</li>
-					</ul>
-
-					<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-						{% if app.user %}
+						{% if is_granted('ROLE_ADMIN') %}
 							<li class="nav-item">
-								<a class="nav-link" href="{{ path('app_logout') }}">Se déconnecter</a>
+								<a class="nav-link" href="{{path('admin')}}">
+									<i class="fas fa-sign-in-alt">
+										<i>Administration</a>
+									</li>
+								{% else %}
+
+									<li class="nav-item">
+										<a class="nav-link disabled">Administration</a>
+									</li>
+								{% endif %}
 							</li>
-						{% else %}
+						</ul>
+
+						<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+							{% if app.user %}
+								<li class="nav-item">
+									<a class="nav-link" href="{{ path('app_logout') }}">Se déconnecter</a>
+								</li>
+							{% else %}
 
 
-							<li class="nav-item">
-								<a class="nav-link" href="{{ path('app_register') }}">S'inscrire</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="{{ path('app_login') }}">Se connecter</a>
-							</li>
-						{% endif %}
-					</ul>
+								<li class="nav-item">
+									<a class="nav-link" href="{{ path('app_register') }}">S'inscrire</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="{{ path('app_login') }}">Se connecter</a>
+								</li>
+							{% endif %}
+						</ul>
 
+					</div>
 				</div>
-			</div>
-		</nav>
+			</nav>
 		{% endblock %}
-	</header>
-	{# {% block flashes %}
-		{% for message in app.flashes('success') %}
-			<div>{{message}}</div>
-			{% endfor %}
-		{% for message in app.flashes('danger') %}
-			<div>{{message}}</div>
-			{% endfor %} #}
-	<body>
-		{% block body %}{% endblock %}
-	</body>
-</html>
+	</html>
+</html></header>{# {% block flashes %}
+				{% for message in app.flashes('success') %}
+					<div>{{message}}</div>
+					{% endfor %}
+				{% for message in app.flashes('danger') %}
+					<div>{{message}}</div>
+					{% endfor %} #}<body>
+{% block body %}{% endblock %}</body></html>

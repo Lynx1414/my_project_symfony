@@ -5,7 +5,9 @@ namespace App\Form;
 use App\Entity\Categories;
 use App\Entity\Enseignes;
 use App\Entity\Produits;
+use App\Entity\Users;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -47,6 +49,10 @@ class ProduitsType extends AbstractType
                 'class' => Categories::class,
                 'choice_label'=> 'nomCategory',
                 'required' => true,
+            ))
+            ->add('user', EntityType::class, array(
+                'class' => Users::class,
+                'disabled' => true,
             ));
     }
 
@@ -54,10 +60,11 @@ class ProduitsType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Produits::class,
+            'constraints' => array(new UniqueEntity(['fields' => 'nom_produit'], 'Ce nom de produit est indisponible !'))
         ]);
     }
 }
 
-       // todo la propriete de class $reference sera a appellé dans  pour appeller la methode getNumeroReference() methode de la class References.php
-            //todo ReferencesType gère à la fois le type de l'input et imbrique le formulaire ReferencesType dans le formulaire ProduitsType
-            //todo ainsi quand on voudra ajouter un produit le form de ReferenceType sera inclus inside
+//todo la propriete de class $reference sera a appellé dans  pour appeller la methode getNumeroReference() methode de la class References.php
+//todo ReferencesType gère à la fois le type de l'input et imbrique le formulaire ReferencesType dans le formulaire ProduitsType
+//todo ainsi quand on voudra ajouter un produit le form de ReferenceType sera inclus inside

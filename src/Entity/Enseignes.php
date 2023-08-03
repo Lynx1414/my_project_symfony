@@ -31,6 +31,11 @@ class Enseignes
     private Collection $produits;
     //tableau d'objet qui inclut un tableau en value json_encode
 
+    public function __toString()
+    {
+        return $this->nom_enseigne;
+    }
+
     public function __construct()
     {
         $this->produits = new ArrayCollection();

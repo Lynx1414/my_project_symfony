@@ -21,6 +21,11 @@ class References
     #[ORM\OneToOne(mappedBy: 'reference', cascade: ['persist', 'remove'])]
     private ?Produits $nom_ref_produit = null;
 
+    public function __toString()
+    {
+        return $this->numero_reference;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

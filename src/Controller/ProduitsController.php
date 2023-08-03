@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Produits;
 use App\Entity\References;
+use App\Entity\Users;
 use App\Form\ProduitsType;
+use App\Form\SearchBarType;
 use App\Repository\ProduitsRepository;
 use App\Repository\ReferencesRepository;
 use Doctrine\ORM\EntityManager;
@@ -18,19 +20,48 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/produits')]
 class ProduitsController extends AbstractController
 {
-    #[Route('/', name: 'app_produits_index', methods: ['GET'])]
-    public function index(ProduitsRepository $produitsRepository): Response
+    #[Route('/', name: 'app_produits_index', methods: ['GET', 'POST'])]
+    public function index(ProduitsRepository $produitsRepository, Request $request): Response
     {
+        $produits= new Produits();
+        $form_nom= $this->createForm(SearchBarType::class, $produits);
+        $form_nom->handleRequest($request);
+       
+        $resultat_search= [];
+        
+        if ($form_nom->isSubmitted() && $form_nom->isValid()) {
+            $mot= $form_nom->get('nom_produit')->getData();
+            
+            $resultat_search= $produitsRepository->searchProduitByNom($mot);
+            //dd($resultat_search);//renvoie un [];
+            if(count($resultat_search) == 0){
+                $resultat_search = "null";
+            }
+        }
+        
         return $this->render('produits/index.html.twig', [
             'produits' => $produitsRepository->findAll(),
             'produitVedette' => $produitsRepository->lastProduitVedette(),
+            'form'=> $form_nom->createView(),
+            'resultats'=> $resultat_search,
         ]);
-    }   
+    }
+    //stock dans une variable une instance de l’entité Produits
+    //créé le formulaire
+    //le formulaire qui est inspecté via la méthode handleRequest()
+    //créé un tableau vide qui va stocker les resultats
+    //recupere récupère input. Value avec la méthode getData().     
+    //getData() est stocké dans la variable $mot
 
     #[Route('/new', name: 'app_produits_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $produit = new Produits();
+        //Recuperation des informations de l'utilisateur connecté(courant)
+        $user = $this->getUser();
+        // dd($user);
+        //Pour creer un produits l'entité utilisateur courant (Mutateur = setter Utilisateurs)
+        $produit->setUser($user);
         $form = $this->createForm(ProduitsType::class, $produit);
         $form->handleRequest($request);
 
@@ -120,6 +151,22 @@ class ProduitsController extends AbstractController
         return $this->redirectToRoute('app_produits_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    #[Route('/{id}/tableauBordUser', name: 'app_produits_tableauBordUser', methods: ['GET', 'POST'])]
+    public function displayTableauBordUser(Users $users): Response
+    {
+        $userProduits= $users->getProduits();
+        return $this->render('produits/tableauBordUser.html.twig', [
+            'userProduits' => $userProduits,
+        ]);
+    }
+
+
+    
+}
+
+
+
+
     // #[Route('/{id}/search', name: 'app_search', methods: ['GET', 'POST'])]
     // public function search(Request $request, References $references,  ReferencesRepository $referencesRepository, EntityManagerInterface $entityManager, $ref=null): Response
     // {
@@ -137,4 +184,4 @@ class ProduitsController extends AbstractController
     //         'references' => $referencesRepository->findAll()
     //     ]);
     // }
-}
+

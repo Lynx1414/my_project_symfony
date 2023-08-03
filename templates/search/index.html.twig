@@ -1,34 +1,41 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello SearchController!
+{% block title %}Search!
 {% endblock %}
 
 {% block body %}
-	<h4>Toutes les références produits</h4>
+	
+<section class="d-flex justify-content-around align-items-center mt-4 ">
 
 <div>
+{# TODO #}
+<label for="search_bar_nom_produit">Rechercher un produit :</label>
+<input type="search" id="search_bar_nom_produit" name="search_bar[nom_produit]" placeholder="Nom du produit" class="search-bar">
+</div>
+{# TODO #}
+<div>
+<h4>Rechercher un produit par référence</h4>
 {% for reference in references %}
- 
     <a href="{{ path('app_search_byRef', {'id': reference.id }) }}">{{reference.numeroReference}}</a>
 {% endfor %}
-
 </div>
 
-{# 
-	<div class="">
-		<select name="ref" id="ref">
-			numero Reference
-			{% for reference in references %}
-				<option value="{{reference.numeroReference}}">{{reference.numeroReference}}</option>
-			{% endfor %}
-		</select>
+<div>
+<h4>Rechercher un ou des produit(s) par catégorie</h4>
+{% for category in categories %}
+    <li class="list-group-item">
+    <a href="{{ path('app_search_byCat', {'id': category.id }) }}">{{category.nomCategory}}</a>
+    </li>
+{% endfor %}
+</div>
 
-        
-
-    
-	</div> #}
-	{# <input class="form-control searchbar m-4" type="search" name="ref" placeholder="Search" aria-label="Search">   #}
-	{# <a href="{{ path('app_search_index', {'id': reference.id}) }}" class="btn btn-outline-success m-4" type="submit">Search</a> #}
-
-
+<div>
+<h4>Rechercher un ou des produit(s) par enseigne</h4>
+{% for enseigne in enseignes %}
+    <li class="list-group-item">
+    <a href="{{ path('app_search_by_shop', {'id': enseigne.id }) }}">{{enseigne.nomEnseigne}}</a>
+    </li>
+{% endfor %}
+</div>
+</section>
 {% endblock %}

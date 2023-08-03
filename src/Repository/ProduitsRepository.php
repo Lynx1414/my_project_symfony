@@ -31,6 +31,14 @@ class ProduitsRepository extends ServiceEntityRepository
         return $produitVedette;
     }
 
+    //! effectuer une recherche par nom de produits (method appelée dans ProduitsController.php)
+    public function searchProduitByNom($mot){
+        return $this->createQueryBuilder('p')
+        ->where('p.nom_produit LIKE :mot')
+        ->setParameter('mot', '%' . $mot . '%')
+        ->getQuery()
+        ->getResult();
+    }
     
     // public function findProduitByRef($ref)
     // {
