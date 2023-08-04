@@ -3,7 +3,6 @@
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -15,10 +14,10 @@ class SearchBarType extends AbstractType
         $builder
             ->add('nom_produit', SearchType::class, array(
                 'required' => false,
-                'label' => 'Rechercher un produit :',
+                'label' => 'Par nom du produit : ',
                 'attr'=>array(
-                    'placeholder' => 'Nom du produit',
-                    'class' => 'form-control search-bar',
+                    'placeholder' => '',
+                    'class' => 'form-control',
                     )
                 ));
 

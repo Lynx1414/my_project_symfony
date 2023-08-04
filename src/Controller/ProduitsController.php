@@ -3,16 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Produits;
-use App\Entity\References;
 use App\Entity\Users;
 use App\Form\ProduitsType;
 use App\Form\SearchBarType;
 use App\Repository\ProduitsRepository;
-use App\Repository\ReferencesRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,12 +18,18 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProduitsController extends AbstractController
 {
     #[Route('/', name: 'app_produits_index', methods: ['GET', 'POST'])]
-    public function index(ProduitsRepository $produitsRepository, Request $request): Response
+    public function index(PaginatorInterface $paginator, ProduitsRepository $produitsRepository, Request $request): Response
     {
         $produits= new Produits();
         $form_nom= $this->createForm(SearchBarType::class, $produits);
         $form_nom->handleRequest($request);
        
+        $query= $produitsRepository->findAll();
+        $pagination = $paginator->paginate(
+            $query, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            2 /*limit per page*/
+        );
         $resultat_search= [];
         
         if ($form_nom->isSubmitted() && $form_nom->isValid()) {
@@ -44,6 +47,7 @@ class ProduitsController extends AbstractController
             'produitVedette' => $produitsRepository->lastProduitVedette(),
             'form'=> $form_nom->createView(),
             'resultats'=> $resultat_search,
+            'pagination'=> $pagination,
         ]);
     }
     //stock dans une variable une instance de l’entité Produits

@@ -70,3 +70,11 @@ section.d-flex{
   border: none !important;
 }
 
+/* form{
+  display: flex;
+  justify-content: center;
+} */
+
+#search_bar{
+  width: 50% !important;
+}

@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Categories;
 use App\Entity\Enseignes;
+use App\Entity\Produits;
+use App\Form\SearchBarType;
 use App\Repository\CategoriesRepository;
 use App\Repository\EnseignesRepository;
 use App\Repository\ProduitsRepository;
@@ -17,17 +19,34 @@ use Symfony\Component\Routing\Annotation\Route;
 class SearchController extends AbstractController
 {
     #[Route('/', name: 'app_search_index', methods: ['GET', 'POST'])]
-    public function index(ReferencesRepository $referencesRepository, CategoriesRepository $categoriesRepository, EnseignesRepository $enseignesRepository): Response
+    public function index(ProduitsRepository $produitsRepository, Request $request, ReferencesRepository $referencesRepository, CategoriesRepository $categoriesRepository, EnseignesRepository $enseignesRepository): Response
     {
+        $produits= new Produits();
+        $form_nom= $this->createForm(SearchBarType::class, $produits);
+        $form_nom->handleRequest($request);
+       
+        $resultat_search= [];
+        
+        if ($form_nom->isSubmitted() && $form_nom->isValid()) {
+            $mot= $form_nom->get('nom_produit')->getData();
+            
+            $resultat_search= $produitsRepository->searchProduitByNom($mot);
+            //dd($resultat_search);//renvoie un [];
+            if(count($resultat_search) == 0){
+                $resultat_search = "null";
+            }
+        }
+
+        // $resultat_search = $researchByNameService->searchByMot($mot);
 
         return $this->render('search/index.html.twig', [
             'references' => $referencesRepository->findAll(),
             'categories' => $categoriesRepository->findAll(),
             'enseignes' => $enseignesRepository->findAll(),
-            // todo
+            'form'=> $form_nom->createView(),
+            'resultats'=> $resultat_search,
         ]);
     }
-
    
     #[Route('/{id}', name: 'app_search_byRef', methods:['GET'])]
     public function search(Request $request, ProduitsRepository $produitsRepository): Response

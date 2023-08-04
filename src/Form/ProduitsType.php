@@ -35,7 +35,9 @@ class ProduitsType extends AbstractType
             ->add('date_depot_produit', DateType::class, array(
                 'widget' => 'single_text',
             ))
-            ->add('prix_produit', NumberType::class)
+            ->add('prix_produit', NumberType::class, [
+                'label' => 'Prix en €uro',
+            ])
             ->add('reference', ReferencesType::class, [
                 'required' => true,
             ])

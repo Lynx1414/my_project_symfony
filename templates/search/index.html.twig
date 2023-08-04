@@ -5,16 +5,36 @@
 
 {% block body %}
 	
-<section class="d-flex justify-content-around align-items-center mt-4 ">
+<section class="d-flex justify-content-around align-items-baseline mt-5 w-50 mx-auto ">
 
 <div>
-{# TODO #}
-<label for="search_bar_nom_produit">Rechercher un produit :</label>
-<input type="search" id="search_bar_nom_produit" name="search_bar[nom_produit]" placeholder="Nom du produit" class="search-bar">
-</div>
-{# TODO #}
+<h4>Rechercher un produit</h4>
+	{# !searchbar form search by name #}
+	{{ form(form) }}
+		{% if resultats is not empty and resultats != 'null' %}
+			<div class="text-center">
+				<h3 class="text-info mx-auto">Résultat de recherche :</h3>
+			</div>
+
+			<div class="container d-flex w-100 mx-auto shadow border-primary p-3">
+				{% for resultat in resultats %}
+					<div class="col-md-4 col-sm-12 mx-auto p-3 card mt-2">
+						<h2 class="text-warning">{{resultat.nomProduit}}</h2>
+						<a href="" {{ path('app_produits_show', {'id': resultat.id} ) }}"">
+							<img src="{{ asset('img/' ~ resultat.imageProduit)}}" alt="" class="card-img " width="25%">
+						</a>
+						<div></div>
+						<a class="btn btn-outline-success" href="{{ path('app_produits_show', {'id': resultat.id}) }}">Voir le produit</a>
+					</div>
+				{% endfor %}
+			</div>
+		{% elseif resultats == "null" %}
+			<div class="alert alert-danger">Aucun résultat pour cette recherche</div>
+		{% endif %}
+
+<section class="d-flex justify-content-around align-items-baseline mt-5 mb-3 w-100 mx-auto ">
 <div>
-<h4>Rechercher un produit par référence</h4>
+<h4>Par référence</h4>
 {% for reference in references %}
     <a href="{{ path('app_search_byRef', {'id': reference.id }) }}">{{reference.numeroReference}}</a>
 {% endfor %}

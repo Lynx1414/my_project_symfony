@@ -15,7 +15,7 @@
 	</div>
 
 
-<section class="d-flex justify-content-around align-items-center mt-3">
+<section class="d-flex justify-content-around align-items-center mt-3 mb-0">
 {% for produit in userProduits %}
 	<div class="card" style="width: 25rem;">
 		<img src="{{ asset('img/' ~ produit.imageProduit) }}" class="card-img-top" alt="...">
@@ -54,11 +54,11 @@
 {% endfor %}
 </section>
 
-<br>
+
 {# <tr>
 <td colspan="8">no records found</td>
 </tr> #}
-<div class="d-flex col-1 mx-auto mb-3">
+<div class="d-flex col-1 mx-auto mb-3 mt-0">
 	<a class="btn btn-success" href="{{ path('app_produits_new') }}">Ajouter un produit</a>
 	</div>
 {% endblock %}
