@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ProduitsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,6 +13,7 @@ use symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 
 #[ORM\Entity(repositoryClass: ProduitsRepository::class)]
+#[ApiResource]
 //Contrainte pour éviter doublons des noms de produits
 // #[UniqueEntity(['nom_produit'], 'Ce nom de produit est indisponible !')]
 class Produits
