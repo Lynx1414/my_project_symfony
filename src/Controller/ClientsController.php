@@ -8,6 +8,7 @@ use App\Form\ClientType;
 use App\Repository\ClientsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -36,11 +37,17 @@ class ClientsController extends AbstractController
     public function addClient(Request $request, EntityManagerInterface $entityManagerInterface ): Response
     //! injection de dépendances :abstraction de la class Request pour prototypage de HEADER du BODY... ($_SERVER, $_SESSION, $_GET, $_POST, $_FILE...) équivalent encodeJson? et de la class EntityManagerInterface (dossier orm -> dossier lib\Doctrine\ORM-> fichier EntityManagerInterfac) pour accès aux méthodes de prototypage pour UPDATE et DELETE 
     {
+        // echo $request->getPathInfo();///clients/new
+        // echo $request->getUri();//http://127.0.0.1:8000/clients/new
+        // echo $request->getUriForPath('/clients/new');//http://127.0.0.1:8000/clients/new
+        // echo $request->headers->get('User-Agent');//Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36
+        
         $newClient= new Clients();
         // todo Instance de la classe Produit Entity
         $form= $this->createForm(ClientsType::class, $newClient);
-        // todo methode createForm qui SERT A LIER un form à une entité. Prend comme parametre la class du formulaire et l'entity créée ligne 49
+        // todo methode createForm qui SERT A LIER un form à une entité. Prend comme parametre la class du formulaire et l'objet Entity créé ligne 45
         $form->handleRequest($request);
+        
         // todo methode handleRequest() prototypé dans la class Request, récupère tous les champs du formaulaire
         //todo handleRequest($request) == $_POST['tous les attributs name des inputs']
 
@@ -97,5 +104,6 @@ class ClientsController extends AbstractController
         }
         return $this->redirectToRoute('app_clients_all', [], Response::HTTP_SEE_OTHER);
     }
+
 
 }

@@ -75,6 +75,20 @@ section.d-flex{
   justify-content: center;
 } */
 
-#search_bar{
-  width: 50% !important;
+/* div#search_bar{
+  width: 50%;
+} */
+
+#search_bar>div{
+  display: flex;
+}
+
+div#select_ref, div#select_cat {
+  display: flex;
+  gap: 20px;
+  align-items: baseline;
+}
+
+div#select_cat{
+  margin-bottom: 1em;
 }

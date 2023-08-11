@@ -31,7 +31,7 @@ class ProduitsRepository extends ServiceEntityRepository
         return $produitVedette;
     }
 
-    //! effectuer une recherche par nom de produits (method appelée dans ProduitsController.php)
+    //! effectuer une recherche par nom de produits (method appelée dans SearchController.php)
     public function searchProduitByNom($mot){
         return $this->createQueryBuilder('p')
         ->where('p.nom_produit LIKE :mot')
@@ -39,16 +39,26 @@ class ProduitsRepository extends ServiceEntityRepository
         ->getQuery()
         ->getResult();
     }
-    
-    // public function findProduitByRef($ref)
+
+
+    //! effectuer une recherche par categorie (method appelée dans SearchController.php)
+    public function searchProduitByCat($cat)
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.category = :cat')
+            ->setParameter('cat', $cat)
+            ->getQuery()
+            ->getResult();
+    }
+    // public function SearchProduitByRef($ref)
     // {
-    //     $produitByRef = $this->createQueryBuilder('produitsCopy') // Crée un QueryBuilder pour l'entité Produits avec un alias 'produitsCopy'.
-    //         ->join('produitsCopy.reference', 'referencesCopy') // Effectue une jointure entre l'entité Produits et l'entité Reference (via la relation reference_id) avec un alias 'referencesCopy'.
-    //         ->where('referencesCopy.id', $ref) // Filtre les résultats en utilisant la clause WHERE pour récupérer uniquement les produits dont la référence (l'attribut id de l'entité Reference) correspond à la valeur $ref passée en paramètre.
+    //     return $this->createQueryBuilder('produitsCopy') // Crée un QueryBuilder pour l'entité Produits avec un alias 'produitsCopy'.
+    //         ->join('produitsCopy.reference', 'references') // Effectue une jointure entre l'entité Produits et l'entité Reference (via la relation reference_id) avec un alias 'referencesCopy'.
+    //         ->where('references.id', $ref) // Filtre les résultats en utilisant la clause WHERE pour récupérer uniquement les produits dont la référence (l'attribut id de l'entité Reference) correspond à la valeur $ref passée en paramètre.
     //         ->getQuery() // Obtient l'objet Query correspondant à la requête DQL construite.
     //         ->getResult(); // Exécute la requête et récupère le résultat sous forme d'un tableau d'objets.
     
-    //     return $produitByRef; // Renvoie les produits trouvés sous forme d'un tableau d'objets.
+    //      // Renvoie les produits trouvés sous forme d'un tableau d'objets.
     // }
 
 //    /**

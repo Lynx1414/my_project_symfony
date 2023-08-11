@@ -59,13 +59,19 @@ class ProduitsController extends AbstractController
     //recupere récupère input. Value avec la méthode getData().     
     //getData() est stocké dans la variable $mot
 
+    #[Route('/test', name: 'app_produits_test')]
+    public function test(Request $request):Response{
+        dd($request);
+        $this->render('produits/test.html.twig');
+    }
+
     #[Route('/new', name: 'app_produits_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $produit = new Produits();
         //Recuperation des informations de l'utilisateur connecté(courant)
         $user = $this->getUser();
-        // dd($user);
+        // dd($user);// toutes les informations de l'utilisateur courant 
         //Pour creer un produits l'entité utilisateur courant (Mutateur = setter Utilisateurs)
         $produit->setUser($user);
         $form = $this->createForm(ProduitsType::class, $produit);
@@ -74,6 +80,18 @@ class ProduitsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $file= $form["image_produit"]->getData();
+            // dd($file);//Symfony\Component\HttpFoundation\File\UploadedFile {#18 ▼
+                // -test: false
+                // -originalName: "kisspng-multi-function-printer-canon-ink-cartridge-inkjet-imprimante-5b316c5c109619.879285511529965660068 (1).png"
+                // -mimeType: "image/png"
+                // -error: 0
+                // path: "C:\wamp64\tmp"
+                // filename: "php5012.tmp"
+                // basename: "php5012.tmp"
+                // pathname: "C:\wamp64\tmp\php5012.tmp"
+                // extension: "tmp"
+                // realPath: "C:\wamp64\tmp\php5012.tmp"
+                
             //recupération de la propriété privée de l'image dans l'entité
             if(!is_string($file)){
                 $fileName= $file->getClientOriginalName();

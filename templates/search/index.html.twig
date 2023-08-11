@@ -4,58 +4,80 @@
 {% endblock %}
 
 {% block body %}
-	
-<section class="d-flex justify-content-around align-items-baseline mt-5 w-50 mx-auto ">
 
-<div>
-<h4>Rechercher un produit</h4>
-	{# !searchbar form search by name #}
-	{{ form(form) }}
-		{% if resultats is not empty and resultats != 'null' %}
-			<div class="text-center">
-				<h3 class="text-info mx-auto">Résultat de recherche :</h3>
-			</div>
+	<section class="d-flex justify-content-around align-items-baseline mt-5 w-50 mx-auto ">
+		<div class= "border p-5 mb-5">
+			<h2>Rechercher un produit</h2>
+			{# !searchbar form search by name #}
+			{{ form(form) }}
+				{# !searchbar form search by ref #}
+				{{ form(form_ref)}}
+					{# !searchbar form search by cat #}
+					{{ form(form_cat) }}
+						{% if resultats is not empty and resultats != 'null' %}
+							<div class="text-center">
+								<h3 class="text-info mx-auto">Résultat de recherche :</h3>
+							</div>
+							<div class="container d-flex justify-content-center w-100 mx-auto shadow border-primary p-3 gap-3 ">
+								{% for resultat in resultats %}
+									<div class="card" style="width: 25rem;">
+										<img src="{{ asset('img/' ~ resultat.imageProduit) }}" class="card-img-top" alt="..." width="25%">
+										<div class="card-body">
+											<h4 class="card-title">{{ resultat.nomProduit }}</h4>
+											<p class="card-text">Description:
+												{{ resultat.descriptionProduit }}</p>
+											<p class="card-text">
+												Réf.<b>{{ resultat.reference.numeroReference }}</b>&nbsp&nbsp
+												Cat.<b>{{resultat.category.nomCategory}}</b>
+											</p>
+										</div>
 
-			<div class="container d-flex w-100 mx-auto shadow border-primary p-3">
-				{% for resultat in resultats %}
-					<div class="col-md-4 col-sm-12 mx-auto p-3 card mt-2">
-						<h2 class="text-warning">{{resultat.nomProduit}}</h2>
-						<a href="" {{ path('app_produits_show', {'id': resultat.id} ) }}"">
-							<img src="{{ asset('img/' ~ resultat.imageProduit)}}" alt="" class="card-img " width="25%">
-						</a>
-						<div></div>
-						<a class="btn btn-outline-success" href="{{ path('app_produits_show', {'id': resultat.id}) }}">Voir le produit</a>
-					</div>
-				{% endfor %}
-			</div>
-		{% elseif resultats == "null" %}
-			<div class="alert alert-danger">Aucun résultat pour cette recherche</div>
-		{% endif %}
+										<ul class="list-group list-group-flush">
+											<li class="list-group-item">Prix:
+												{{ resultat.prixProduit }}
+												€</li>
+											<li class="list-group-item">En stock:
+												{{ resultat.stockProduit ? 'disponible' : 'rupture de stock' }}</li>
+											<li class="list-group-item">Date de dépôt:
+												{{ resultat.dateDepotProduit ? resultat.dateDepotProduit|date('d/m/Y') : '' }}</li>
+										</ul>
+										
+										<div></div>
+										<a class="btn btn-outline-success" href="{{ path('app_produits_show', {'id': resultat.id}) }}">Voir le produit</a>
+									</div>
+								{% endfor %}
+							</div>
+						{% elseif resultats  %}
+							<div class="alert alert-danger">Aucun résultat pour cette recherche</div>
+						{% endif %}
 
-<section class="d-flex justify-content-around align-items-baseline mt-5 mb-3 w-100 mx-auto ">
-<div>
-<h4>Par référence</h4>
-{% for reference in references %}
-    <a href="{{ path('app_search_byRef', {'id': reference.id }) }}">{{reference.numeroReference}}</a>
-{% endfor %}
-</div>
 
-<div>
-<h4>Rechercher un ou des produit(s) par catégorie</h4>
-{% for category in categories %}
-    <li class="list-group-item">
-    <a href="{{ path('app_search_byCat', {'id': category.id }) }}">{{category.nomCategory}}</a>
-    </li>
-{% endfor %}
-</div>
+	<section class="d-flex justify-content-around align-items-baseline mt-5 mb-3 w-100 mx-auto ">
+		<div>
+			<h4>Références</h4>
+			{% for reference in references %}
+				<li class="list-group-item">
+					<a href="{{ path('app_search_byRef', {'id': reference.id }) }}">{{reference.numeroReference}}</a>
+				</li>
+			{% endfor %}
+		</div>
 
-<div>
-<h4>Rechercher un ou des produit(s) par enseigne</h4>
-{% for enseigne in enseignes %}
-    <li class="list-group-item">
-    <a href="{{ path('app_search_by_shop', {'id': enseigne.id }) }}">{{enseigne.nomEnseigne}}</a>
-    </li>
-{% endfor %}
-</div>
-</section>
+		<div>
+			<h4>Catégories</h4>
+			{% for category in categories %}
+				<li class="list-group-item">
+					<a href="{{ path('app_search_byCat', {'id': category.id }) }}">{{category.nomCategory}}</a>
+				</li>
+			{% endfor %}
+		</div>
+
+		<div>
+			<h4>Enseignes</h4>
+			{% for enseigne in enseignes %}
+				<li class="list-group-item">
+					<a href="{{ path('app_search_by_shop', {'id': enseigne.id }) }}">{{enseigne.nomEnseigne}}</a>
+				</li>
+			{% endfor %}
+		</div>
+	</section>
 {% endblock %}
